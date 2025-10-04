@@ -1,0 +1,65 @@
+[package]
+name = "chat-leptos-axum"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "chat_leptos_axum"
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = []
+ssr = [
+  "leptos/ssr",
+  "leptos_meta/ssr",
+  "leptos_router/ssr",
+  "dep:axum",
+  "dep:tokio",
+  "dep:tower-http",
+  "dep:leptos_axum",
+]
+hydrate = [
+  "leptos/hydrate",
+  "leptos_meta/hydrate",
+  "leptos_router/hydrate",
+  "console_error_panic_hook",
+  "wasm-bindgen",
+  "js-sys",
+  "web-sys",
+]
+
+[dependencies]
+leptos = { version = "0.6", default-features = false }
+leptos_meta = { version = "0.6", default-features = false }
+leptos_router = { version = "0.6", default-features = false }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+anyhow = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
+console_error_panic_hook = { version = "0.1", optional = true }
+wasm-bindgen = { version = "0.2", optional = true }
+js-sys = { version = "0.3", optional = true }
+web-sys = { version = "0.3", optional = true, features = ["Window", "Location", "WebSocket", "MessageEvent"] }
+axum = { version = "0.7", features = ["ws", "macros"], optional = true }
+tokio = { version = "1", features = ["full"], optional = true }
+tower-http = { version = "0.5", features = ["fs", "trace"], optional = true }
+leptos_axum = { version = "0.6", optional = true }
+
+[[bin]]
+name = "chat-leptos-axum"
+path = "src/main.rs"
+required-features = ["ssr"]
+
+[package.metadata.leptos]
+output-name = "chat-leptos-axum"
+site-root = "target/site"
+site-pkg-dir = "pkg"
+site-addr = "127.0.0.1:3000"
+reload-port = 3001
+env = "DEV"
+bin-target = "chat-leptos-axum"
+bin-features = ["ssr"]
+bin-default-features = false
+lib-features = ["hydrate"]
+lib-default-features = false
